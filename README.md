@@ -1,95 +1,30 @@
-# Obsidian Sample Plugin
+# Finnish Spellcheck for Obsidian
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+The Finnish Spellcheck for Obsidian is a plugin for [obsidian](https://obsidian.md) that integrates advanced spellchecking and grammatical analysis into your Obsidian editor. It utilizes Voikko, a tool for Finnish language that includes morphological analysis, spelling, grammar checking, hyphenation, and other linguistic data.
 
-This project uses Typescript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
+## Installation
+**Note: Currently, this plugin cannot be installed directly from the Obsidian plugin marketplace.**
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
+### Manual Installation
+1. Download the latest `main.js`, `styles.css`, and `manifest.json` files from the [releases page](https://github.com/antoKeinanen/obsidian-finnish-spellcheck/releases).
+2. Copy these files to the following directory in your Obsidian vault: `{vault path}/.obsidian/plugins/finnish-spellcheck/`.
+3. In some cases, you may need to download libvoikko. Instructions for downloading libvoikko can be found here: [Windows](https://www.puimula.org/htp/testing/voikko-sdk/win-crossbuild/), [Apple](https://formulae.brew.sh/formula/libvoikko), and for Linux, most package repositories should have libvoikko available.
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+## Usage
+Once installed, this plugin adds a command panel entry called "Spellcheck" that can be accessed by pressing `Ctrl+P`. Additionally, you can run the spellcheck by clicking the "Aa" button in the bottom right corner.
 
-## First time developing plugins?
+## Contributing
+Contributions to this plugin are welcome and appreciated. Please ensure that any contributions follow the codebase's conventions, use the Angular style for commit messages and format the code with `npm run format`.
 
-Quick starting guide for new plugin devs:
+## Building from Source
+To build the plugin from source, follow these steps:
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+1. Clone and build `libvoikko-js` from [https://github.com/niilo/libvoikko-js](https://github.com/niilo/libvoikko-js) using the provided Dockerfile.
+2. Move `libvoikko-morpho.js` and `libvoikko-morpho.d.ts` to `src/voikko` in this repository.
+3. Build with: `npm run build`.
 
-## Releasing new releases
-
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check https://github.com/obsidianmd/obsidian-releases/blob/master/plugin-review.md
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
-
-## How to use
-
-- Clone this repo.
-- `npm i` or `yarn` to install dependencies
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
+## Acknowledgements
+This plugin heavily relies on the following open-source projects and I would like to thank their authors and maintainers:
+- [Obsidian LanguageTool Plugin](https://github.com/Clemens-E/obsidian-languagetool-plugin) by Clemens-E (licensed under AGPL-3.0)
+- [libvoikko](https://github.com/voikko/corevoikko/tree/master/libvoikko) (website: [https://voikko.puimula.org](https://voikko.puimula.org)) (licensed under GPL-3.0)
+- [libvoikko-js](https://github.com/niilo/libvoikko-js) by Niilo Ursin (licensed under GPL-3.0)
