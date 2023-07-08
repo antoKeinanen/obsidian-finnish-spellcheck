@@ -1,5 +1,7 @@
 # Finnish Spellcheck for Obsidian
 
+Ohjeet ovat myös käännetty suomenkielelle. Voit lukea ne [täältä](https://github.com/antoKeinanen/obsidian-finnish-spellcheck/blob/main/readme.fi.md).
+
 The Finnish Spellcheck for Obsidian is a plugin for [obsidian](https://obsidian.md) that integrates advanced spellchecking and grammatical analysis into your Obsidian editor. It utilizes Voikko, a tool for Finnish language that includes morphological analysis, spelling, grammar checking, hyphenation, and other linguistic data.
 
 ## Installation
