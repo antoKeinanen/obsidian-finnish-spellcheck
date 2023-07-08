@@ -1,0 +1,163 @@
+import { MarkdownView, Menu, Notice, Plugin, setIcon } from 'obsidian';
+import { init, spellCheckText, getSuggestions, checkGrammar } from "./voikko-binds";
+import { StateEffect } from '@codemirror/state';
+import { IssueType, addUnderline, clearUnderlines } from './underLineStateField';
+import { buildUnderlineExtension } from "./underlineExtension";
+import { EditorView } from '@codemirror/view';
+
+
+export default class FinnishSpellcheck extends Plugin {
+	voikko: any;
+	private isLoading = false;
+	private statusBarText: HTMLElement;
+
+	async onload() {
+		this.app.workspace.onLayoutReady(() => {
+			this.statusBarText = this.addStatusBarItem();
+			this.setStatusBarReady();
+			this.registerDomEvent(this.statusBarText, 'click', this.handleStatusBarClick);
+			console.info("Voikko started!");
+		});
+
+		this.setStatusBarWorking();
+		new Notice("Starting voikko!");
+
+		init().then((voikko) => {
+			this.voikko = voikko;
+			this.setStatusBarReady();
+			new Notice("Voikko started!");
+		})
+		.catch((err) => {
+			new Notice("Failed to start voikko!");
+			console.error(err);
+		});
+
+		this.registerEditorExtension(buildUnderlineExtension(this));
+		this.registerCommands();
+	}
+
+	private registerCommands() {
+		this.addCommand({
+			id: "fis-text",
+			name: "Spellcheck",
+			editorCallback: (editor, view) => {
+				if (!(view instanceof MarkdownView)) {
+					new Notification("Cannot spellcheck this type of view!");
+					return;
+				}
+				this.runDetection((editor as any).cm as EditorView, view);
+			}
+		});
+	}
+
+	private readonly handleStatusBarClick = () => {
+		const statusBarRect = this.statusBarText.parentElement?.getBoundingClientRect();
+		const statusBarIconRect = this.statusBarText.getBoundingClientRect();
+
+		new Menu()
+			.addItem(item => {
+				item.setTitle('Check current document');
+				item.setIcon('checkbox-glyph');
+				item.onClick(async () => {
+					const activeLeaf = this.app.workspace.activeLeaf;
+					if (activeLeaf?.view instanceof MarkdownView && activeLeaf.view.getMode() === 'source') {
+						try {
+							await this.runDetection((activeLeaf.view.editor as any).cm, activeLeaf.view);
+						} catch (e) {
+							console.error(e);
+						}
+					}
+				});
+			})
+			.addItem(item => {
+				item.setTitle('Clear suggestions');
+				item.setIcon('reset');
+				item.onClick(() => {
+					const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+					if (!view) return;
+
+
+					const cm = (view.editor as any).cm as EditorView;
+					cm.dispatch({
+						effects: [clearUnderlines.of(null)],
+					});
+
+				});
+			})
+			.showAtPosition({
+				x: statusBarIconRect.right + 5,
+				y: (statusBarRect?.top || 0) - 5,
+			});
+	};
+
+	runDetection(editor: EditorView, view: MarkdownView) {
+		this.setStatusBarWorking();
+		const text = view.data;
+		const words = spellCheckText(this.voikko, text).filter((w) => !w.isCorrect);
+		const effects: StateEffect<any>[] = [];
+		console.log("Found the following words to be incorrect: ", words);
+
+		for (const word of words) {
+			const suggestions = getSuggestions(this.voikko, word);
+
+			effects.push(addUnderline.of({
+				from: word.startIndex,
+				to: word.endIndex,
+				match: {
+					message: "The word is misspelled.",
+					type: IssueType.Spell,
+					replacements: suggestions,
+				}
+			}));
+		}
+
+		const grammarErrors = checkGrammar(this.voikko, text);
+		console.log("Found the following grammatical errors: ", grammarErrors);
+
+		for (const grammarError of grammarErrors) {
+			const start = grammarError.startPos;
+			const end = grammarError.startPos + grammarError.errorLen;
+			effects.push(addUnderline.of({
+				from: start,
+				to: end,
+				match: {
+					message: grammarError.shortDescription,
+					type: IssueType.Grammar,
+				}
+			}))
+		}
+
+		if (effects.length) {
+			editor.dispatch({
+				effects,
+			})
+		}
+
+		this.setStatusBarReady();
+	}
+
+	public setStatusBarReady() {
+		this.isLoading = false;
+		this.statusBarText.empty();
+		this.statusBarText.createSpan({ cls: 'fis-status-bar-btn' }, span => {
+			span.createSpan({
+				cls: 'fis-status-bar-check-icon',
+				text: 'Aa',
+			});
+		});
+	}
+
+	public setStatusBarWorking() {
+		if (this.isLoading) return;
+
+		this.isLoading = true;
+		this.statusBarText.empty();
+		this.statusBarText.createSpan({ cls: ['fis-status-bar-btn', 'fis-loading'] }, span => {
+			setIcon(span, 'sync-small');
+		});
+	}
+
+	onunload() { }
+}
+
+

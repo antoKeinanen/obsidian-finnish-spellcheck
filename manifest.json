@@ -1,0 +1,11 @@
+{
+	"id": "finnish-spellcheck",
+	"name": "Finnish Spellcheck",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Spellchecker for the Finnish language. / Oikolukija suomenkielellä.",
+	"author": "Anto Keinänen",
+	"authorUrl": "https://github.com/antoKeinanen",
+	"repo": "antoKeinanen/obsidian-finnish-spellcheck",
+	"isDesktopOnly": false
+}
