@@ -9,8 +9,8 @@
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],
-	"author": "",
-	"license": "MIT",
+	"author": "Anto Keinänen",
+	"license": "AGPL-3.0",
 	"devDependencies": {
 		"@codemirror/language": "github:lishid/cm-language",
 		"@codemirror/state": "^6.2.1",
