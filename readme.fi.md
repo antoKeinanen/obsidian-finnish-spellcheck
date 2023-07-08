@@ -23,6 +23,9 @@ Voit kääntää laajennuksen lähdekoodista noudattamalla seuraavia ohjeita:
 2. Siirrä `libvoikko-morpho.js` ja `libvoikko-morpho.d.ts` tämän arkiston `src/voikko`-osioon.
 3. Käännä käyttäen komentoa: `npm run build`.
 
+## Lisenssi 
+Tämä arkisto on GNU Affero General Public License v3.0:n alainen. Lue lisätietoja [license](https://github.com/antoKeinanen/obsidian-finnish-spellcheck/blob/main/LICENSE) -tiedostosta.
+
 ## Kiitokset
 Tämä lisäosa riippuu vahvasti seuraavista avoimen lähdekoodin projekteista ja haluan kiittää niiden kirjoittajia ja ylläpitäjiä:
 - [Obsidian LanguageTool Plugin](https://github.com/Clemens-E/obsidian-languagetool-plugin) by Clemens-E (lisensoitu AGPL-3.0:n alle).

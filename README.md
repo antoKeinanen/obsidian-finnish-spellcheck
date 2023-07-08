@@ -23,6 +23,9 @@ To build the plugin from source, follow these steps:
 2. Move `libvoikko-morpho.js` and `libvoikko-morpho.d.ts` to `src/voikko` in this repository.
 3. Build with: `npm run build`.
 
+## License 
+This repository is under the GNU Affero General Public License v3.0. For more information please read the [license](https://github.com/antoKeinanen/obsidian-finnish-spellcheck/blob/main/LICENSE) file.
+
 ## Acknowledgements
 This plugin heavily relies on the following open-source projects and I would like to thank their authors and maintainers:
 - [Obsidian LanguageTool Plugin](https://github.com/Clemens-E/obsidian-languagetool-plugin) by Clemens-E (licensed under AGPL-3.0)
