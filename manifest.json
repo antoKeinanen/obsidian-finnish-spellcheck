@@ -7,5 +7,5 @@
 	"author": "Anto Keinänen",
 	"authorUrl": "https://github.com/antoKeinanen",
 	"repo": "antoKeinanen/obsidian-finnish-spellcheck",
-	"isDesktopOnly": false
+	"isDesktopOnly": true
 }
