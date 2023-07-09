@@ -4,6 +4,8 @@ The instructions have also been translated into English. You can read them [here
 
 **Tuoemme tällähetkellä valitettavasti vain obsidianin tietokoneversiota!**
 
+![Picture of text with red and blue underlines indicating mistakes.](https://github.com/antoKeinanen/obsidian-finnish-spellcheck/blob/main/media/demo.png?raw=true)
+
 Finnish Spellcheck for Obsidian on lisäosa [obsidian](obsidian.md) sovellukselle, joka integroi kehittyneen oikeinkirjoituksen tarkistuksen ja kieliopillisen analyysin Obsidian-editoriin. Se hyödyntää Voikkoa, suomen kielen työkalua, joka sisältää morfologisen analyysin, oikeinkirjoituksen, kieliopin tarkistuksen, yhdyssanatarkistuksen ja muita kielitieteellisiä tietoja.
 
 ## Asennus
