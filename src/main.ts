@@ -59,7 +59,7 @@ export default class FinnishSpellcheck extends Plugin {
 				item.setTitle('Check current document');
 				item.setIcon('checkbox-glyph');
 				item.onClick(async () => {
-					const activeLeaf = this.app.workspace.activeLeaf;
+					const activeLeaf = this.app.workspace.getMostRecentLeaf();
 					if (activeLeaf?.view instanceof MarkdownView && activeLeaf.view.getMode() === 'source') {
 						try {
 							await this.runDetection((activeLeaf.view.editor as any).cm, activeLeaf.view);
