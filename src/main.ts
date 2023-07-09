@@ -4,14 +4,19 @@ import { StateEffect } from '@codemirror/state';
 import { IssueType, addUnderline, clearUnderlines } from './underLineStateField';
 import { buildUnderlineExtension } from "./underlineExtension";
 import { EditorView } from '@codemirror/view';
+import { DEFAULT_SETTINGS, FinnishSpellcheckSettings, FinnishSpellcheckSettingTab, SETTINGS_CONTENT } from "./settings";
+import { log } from 'console';
+
 
 
 export default class FinnishSpellcheck extends Plugin {
 	voikko: any;
 	private isLoading = false;
 	private statusBarText: HTMLElement;
+	settings: FinnishSpellcheckSettings;
 
 	async onload() {
+		await this.loadSettings();
 		this.app.workspace.onLayoutReady(() => {
 			this.statusBarText = this.addStatusBarItem();
 			this.setStatusBarReady();
@@ -26,13 +31,22 @@ export default class FinnishSpellcheck extends Plugin {
 			this.setStatusBarReady();
 			new Notice("Voikko started!");
 		})
-		.catch((err) => {
-			new Notice("Failed to start voikko!");
-			console.error(err);
-		});
+			.catch((err) => {
+				new Notice("Failed to start voikko!");
+				console.error(err);
+			});
 
 		this.registerEditorExtension(buildUnderlineExtension(this));
 		this.registerCommands();
+		this.addSettingTab(new FinnishSpellcheckSettingTab(this.app, this));
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
 	}
 
 	private registerCommands() {
@@ -97,6 +111,7 @@ export default class FinnishSpellcheck extends Plugin {
 		console.log("Found the following words to be incorrect: ", words);
 
 		for (const word of words) {
+			if (!this.settings.invalidSpelling) break;
 			const suggestions = getSuggestions(this.voikko, word);
 
 			effects.push(addUnderline.of({
@@ -114,6 +129,12 @@ export default class FinnishSpellcheck extends Plugin {
 		console.log("Found the following grammatical errors: ", grammarErrors);
 
 		for (const grammarError of grammarErrors) {
+			const id = SETTINGS_CONTENT[grammarError.errorCode - 1].id;
+			// @ts-expect-error
+			const allowed: boolean = this.settings[id];
+
+			if (!allowed) continue;
+
 			const start = grammarError.startPos;
 			const end = grammarError.startPos + grammarError.errorLen;
 			effects.push(addUnderline.of({

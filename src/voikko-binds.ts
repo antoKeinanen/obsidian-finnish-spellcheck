@@ -6,12 +6,11 @@ import { Word, splitAndCleanString } from "./util.js";
 export async function init() {
     try {
         const voikko = new Libvoikko();
-        return voikko.init("fi-FI");
+        return voikko.init("fi");
     }
     catch (err) {
         throw new Error(err);
     }
-
 }
 
 export function spellCheckText(v: any, text: string) {
