@@ -7,7 +7,8 @@
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"prettify": "prettier src --write"
+		"prettify": "prettier src --write",
+		"prepare": "husky install"
 	},
 	"keywords": [],
 	"author": "Anto Keinänen",
@@ -21,9 +22,14 @@
 		"@typescript-eslint/parser": "5.29.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.17.3",
+		"husky": "^8.0.3",
+		"lint-staged": "^13.2.3",
 		"obsidian": "latest",
 		"prettier": "^3.0.0",
 		"tslib": "2.4.0",
 		"typescript": "4.7.4"
+	},
+	"lint-staged": {
+		"**/*": "prettier --write --ignore-unknown"
 	}
 }
