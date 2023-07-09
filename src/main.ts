@@ -16,7 +16,6 @@ export default class FinnishSpellcheck extends Plugin {
 			this.statusBarText = this.addStatusBarItem();
 			this.setStatusBarReady();
 			this.registerDomEvent(this.statusBarText, 'click', this.handleStatusBarClick);
-			console.info("Voikko started!");
 		});
 
 		this.setStatusBarWorking();
