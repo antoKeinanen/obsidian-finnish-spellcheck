@@ -48,35 +48,6 @@ export function splitAndCleanString(input: string): Word[] {
     return result;
 }
 
-
-/* export function splitAndCleanString(input: String): Word[] {
-    const result: Word[] = [];
-    let startIndex = 0;
-    let endIndex = 0;
-
-    for (let i = 0; i < input.length; i++) {
-        const char = input[i];
-
-        if (char === ' ' || char === "\n") {
-            if (startIndex !== endIndex) {
-                const substring = input.substring(startIndex, endIndex).replace(/[^a-zA-ZåÅäÄöÖ\-]/, "");
-                result.push({ substring, startIndex, endIndex, isCorrect: undefined });
-            }
-            startIndex = i + 1;
-            endIndex = i + 1;
-        } else {
-            endIndex++;
-        }
-    }
-
-    if (startIndex !== endIndex) {
-        const substring = input.substring(startIndex, endIndex);
-        result.push({ substring, startIndex, endIndex, isCorrect: undefined });
-    }
-
-    return result;
-} */
-
 export function getIssueTypeClassName(issueType: IssueType) {
     switch (issueType) {
         case IssueType.Spell:
