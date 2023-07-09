@@ -108,6 +108,7 @@ export default class FinnishSpellcheck extends Plugin {
 		const text = view.data;
 		const words = spellCheckText(this.voikko, text).filter((w) => !w.isCorrect);
 		const effects: StateEffect<any>[] = [];
+		effects.push(clearUnderlines.of(null));
 		console.log("Found the following words to be incorrect: ", words);
 
 		for (const word of words) {
