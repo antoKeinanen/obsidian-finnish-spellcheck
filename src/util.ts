@@ -17,7 +17,7 @@ export function splitAndCleanString(input: string): Word[] {
     for (let i = 0; i < input.length; i++) {
         const char = input[i];
 
-        if (char === "$" &&  previous !== "\\") {
+        if (char === "$" && previous !== "\\") {
             isInsideDollarSigns = !isInsideDollarSigns;
             continue;
         }
@@ -30,7 +30,8 @@ export function splitAndCleanString(input: string): Word[] {
         } else {
             if (startIndex !== endIndex) {
                 const substring = input.substring(startIndex, endIndex);
-                result.push({ substring, startIndex, endIndex, isCorrect: undefined });
+                if (substring !== "-")
+                    result.push({ substring, startIndex, endIndex, isCorrect: undefined });
             }
             startIndex = i + 1;
             endIndex = i + 1;
