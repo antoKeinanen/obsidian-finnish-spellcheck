@@ -1,10 +1,10 @@
 // from: https://github.com/Clemens-E/obsidian-languagetool-plugin
 
-import { EditorView, Decoration, DecorationSet } from '@codemirror/view';
-import { StateField, StateEffect } from '@codemirror/state';
-import { syntaxTree, tokenClassNodeProp } from '@codemirror/language';
-import { Tree } from '@lezer/common';
-import { getIssueTypeClassName, ignoreListRegEx } from './util';
+import { EditorView, Decoration, DecorationSet } from "@codemirror/view";
+import { StateField, StateEffect } from "@codemirror/state";
+import { syntaxTree, tokenClassNodeProp } from "@codemirror/language";
+import { Tree } from "@lezer/common";
+import { getIssueTypeClassName, ignoreListRegEx } from "./util";
 
 export interface UnderlineEffect {
 	from: number;
@@ -14,15 +14,15 @@ export interface UnderlineEffect {
 
 // Added
 export interface MatchesEntity {
-	message: String,
-	type: IssueType,
-	replacements?: String[],
+	message: String;
+	type: IssueType;
+	replacements?: String[];
 }
 
 // Added
 export enum IssueType {
 	Spell,
-	Grammar
+	Grammar,
 }
 
 export const addUnderline = StateEffect.define<UnderlineEffect>();
@@ -36,7 +36,12 @@ export const ignoreUnderline = StateEffect.define<{
 	to: number;
 }>();
 
-function filterUnderlines(decorationStart: number, decorationEnd: number, rangeStart: number, rangeEnd: number) {
+function filterUnderlines(
+	decorationStart: number,
+	decorationEnd: number,
+	rangeStart: number,
+	rangeEnd: number
+) {
 	// Decoration begins in defined range
 	if (decorationStart >= rangeStart && decorationStart <= rangeEnd) {
 		return false;
@@ -88,7 +93,12 @@ export const ignoredUnderlineField = StateField.define<{
 		if (tr.docChanged && tr.selection && state.marks.size) {
 			state.marks = state.marks.update({
 				filter: (from, to) => {
-					const shouldKeepRange = filterUnderlines(from, to, tr.selection!.main.from, tr.selection!.main.to);
+					const shouldKeepRange = filterUnderlines(
+						from,
+						to,
+						tr.selection!.main.from,
+						tr.selection!.main.to
+					);
 
 					if (!shouldKeepRange) {
 						state.ignoredRanges.delete(`${from},${to}`);
@@ -136,7 +146,9 @@ export const underlineField = StateField.define<DecorationSet>({
 
 			if (!tree) tree = syntaxTree(tr.state);
 
-			const nodeProps = tree.resolveInner(pos, 1).type.prop(tokenClassNodeProp);
+			const nodeProps = tree
+				.resolveInner(pos, 1)
+				.type.prop(tokenClassNodeProp);
 
 			if (nodeProps && ignoreListRegEx.test(nodeProps)) {
 				seenPositions[pos] = false;
@@ -148,13 +160,22 @@ export const underlineField = StateField.define<DecorationSet>({
 		};
 
 		// Ignore certain rules in special cases
-		const isRuleAllowed = (match: MatchesEntity, from: number, to: number) => {
+		const isRuleAllowed = (
+			match: MatchesEntity,
+			from: number,
+			to: number
+		) => {
 			// Don't show spelling errors for entries in the user dictionary
 			if (match.type === IssueType.Spell) {
-				const spellcheckDictionary: string[] = ((window as any).app.vault as any).getConfig('spellcheckDictionary');
+				const spellcheckDictionary: string[] = (
+					(window as any).app.vault as any
+				).getConfig("spellcheckDictionary");
 				const str = tr.state.sliceDoc(from, to);
 
-				if (spellcheckDictionary && spellcheckDictionary.includes(str)) {
+				if (
+					spellcheckDictionary &&
+					spellcheckDictionary.includes(str)
+				) {
 					return false;
 				}
 			}
@@ -169,7 +190,12 @@ export const underlineField = StateField.define<DecorationSet>({
 		if (tr.docChanged && tr.selection && underlines.size) {
 			underlines = underlines.update({
 				filter: (from, to) => {
-					return filterUnderlines(from, to, tr.selection!.main.from, tr.selection!.main.to);
+					return filterUnderlines(
+						from,
+						to,
+						tr.selection!.main.from,
+						tr.selection!.main.to
+					);
 				},
 			});
 		}
@@ -190,7 +216,9 @@ export const underlineField = StateField.define<DecorationSet>({
 					underlines = underlines.update({
 						add: [
 							Decoration.mark({
-								class: `fis-underline ${getIssueTypeClassName(match.type)}`,
+								class: `fis-underline ${getIssueTypeClassName(
+									match.type
+								)}`,
 								match,
 							}).range(from, to),
 						],
@@ -200,12 +228,13 @@ export const underlineField = StateField.define<DecorationSet>({
 				underlines = Decoration.none;
 			} else if (e.is(clearUnderlinesInRange) || e.is(ignoreUnderline)) {
 				underlines = underlines.update({
-					filter: (from, to) => filterUnderlines(from, to, e.value.from, e.value.to),
+					filter: (from, to) =>
+						filterUnderlines(from, to, e.value.from, e.value.to),
 				});
 			}
 		}
 
 		return underlines;
 	},
-	provide: f => EditorView.decorations.from(f),
+	provide: (f) => EditorView.decorations.from(f),
 });
