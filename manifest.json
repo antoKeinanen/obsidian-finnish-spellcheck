@@ -1,7 +1,7 @@
 {
 	"id": "finnish-spellcheck",
 	"name": "Finnish Spellcheck",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"minAppVersion": "0.15.0",
 	"description": "Spellchecker for the Finnish language using Voikko. / Oikolukija suomenkielellä, joka hyödyntää Voikkoa.",
 	"author": "Anto Keinänen",
