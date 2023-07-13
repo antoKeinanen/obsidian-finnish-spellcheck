@@ -72,7 +72,7 @@ export default class FinnishSpellcheck extends Plugin {
 
 	private registerCommands() {
 		this.addCommand({
-			id: "fis-text",
+			id: "spellcheck",
 			name: "Spellcheck",
 			editorCallback: (editor, view) => {
 				if (!(view instanceof MarkdownView)) {
