@@ -6,6 +6,5 @@
 	"description": "Spellchecker for the Finnish language using Voikko. / Oikolukija suomenkielellä, joka hyödyntää Voikkoa.",
 	"author": "Anto Keinänen",
 	"authorUrl": "https://github.com/antoKeinanen",
-	"repo": "antoKeinanen/obsidian-finnish-spellcheck",
 	"isDesktopOnly": true
 }
