@@ -39,18 +39,18 @@ export default class FinnishSpellcheck extends Plugin {
 			);
 		});
 
-		this.setStatusBarWorking();
+		/* this.setStatusBarWorking(); */
 		new Notice("Starting voikko!");
 
 		init()
 			.then((voikko) => {
 				this.voikko = voikko;
-				this.setStatusBarReady();
 				new Notice("Voikko started!");
+				console.log("Voikko is ready!");
 			})
 			.catch((err) => {
 				new Notice("Failed to start voikko!");
-				console.error(err);
+				console.error("Voikko failed: ", err);
 			});
 
 		this.registerEditorExtension(buildUnderlineExtension(this));
@@ -131,6 +131,12 @@ export default class FinnishSpellcheck extends Plugin {
 	};
 
 	runDetection(editor: EditorView, view: MarkdownView) {
+		if (this.voikko === undefined) {
+			new Notice(
+				"Voikko has failed to start. Try disabling and reenabling it from the community plugins page."
+			);
+		}
+
 		this.setStatusBarWorking();
 		const text = view.data;
 		const words = spellCheckText(this.voikko, text).filter(
